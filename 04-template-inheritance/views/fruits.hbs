@@ -1,0 +1,35 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+    <h1>Fruit List</h1>
+    <ul class="list-group">
+        {{#each fruits}}
+        <li class="list-group-item">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h1>Food</h1>
+    <ul class="list-group">
+        {{#each dishes}}
+        <li class="list-group-item">
+            <h2>{{this.name}}</h2>
+            <p>Calories:{{this.calories}}</p>
+        </li>
+        {{/each}}
+
+    </ul>
+
+    {{#if favouriteDrink}}
+       <h1>Favourite Drink: {{favouriteDrink}}</h1>
+    {{/if}}
+
+    {{#ifEquals favouriteDrink "milo peng"}}
+        <h1>Your favourite drink is milo with ice</h1>
+    {{else}}
+        <h1>Your favourite drink is not milo with ice</h1>
+    {{/ifEquals}}
+
+
+{{/block}}
+
+{{/extends}}
