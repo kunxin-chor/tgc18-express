@@ -71,6 +71,28 @@ app.post('/add-food', function(req,res){
     })
 })
 
+
+app.get('/bmi', function(req,res){
+    res.render('bmi-form')
+})
+
+app.post('/bmi', function(req,res){
+    let weight = Number(req.body.weight);
+    let height = Number(req.body.height);
+    // set the 'si' to be the default value if req.body.unit is falsely
+    let unit = req.body.unit || "si";
+    let bmi = weight / height ** 2;
+
+    if (unit == 'imperial') {
+        bmi *= 703;
+    }
+
+    console.log(req.body);
+    res.render('bmi-result', {
+        'bmi': bmi
+    })
+});
+
 /* 3. START SERVER */
 app.listen(3000, function(){
     console.log("server has been started");
