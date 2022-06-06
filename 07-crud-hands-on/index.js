@@ -22,11 +22,18 @@ app.get('/', function(req,res){
 })
 
 app.get('/movies', async function(req,res){
-    let url = BASE_API_URL + 'movies';
-    let response = await axios.get(url);
-    res.render('movies.hbs',{
-        'movies': response.data
-    })
+
+    try {
+        let url = BASE_API_URL + 'movies';
+        let response = await axios.get(url);
+        res.render('movies.hbs',{
+            'movies': response.data
+        })
+    } catch(e){
+        console.log(e);
+        res.send("Error")
+    }
+   
 })
 
 app.listen(3000, function(){
