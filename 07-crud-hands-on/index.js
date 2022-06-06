@@ -36,6 +36,33 @@ app.get('/movies', async function(req,res){
    
 })
 
+// typical standard for the URL 
+// <noun>/<verb>
+app.get('/movies/create', function(req,res){
+    res.render('create_movie')
+})
+
+// app.post('/movies/create', async function(req,res){
+//     let movieTitle = req.body.movie_title;
+//     let moviePlot = req.body.movie_plot;
+
+//     await axios.post(BASE_API_URL + "movie/create",{
+//         'title': movieTitle,
+//         'plot':moviePlot
+//     })
+//     res.redirect('/movies');
+// })
+
+app.post('/movies/create', async function(req,res){
+    let title = req.body.title;
+    let plot = req.body.plot;
+    await axios.post(BASE_API_URL  + "movie/create",{
+        'title': title,
+        'plot': plot
+    })
+    res.redirect('/movies');
+})
+
 app.listen(3000, function(){
     console.log("server started");
 })
