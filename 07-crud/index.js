@@ -46,7 +46,6 @@ app.get('/food_sighting/edit/:food_sighting_id', async function(req,res){
     // 2. extract out the current values of that piece of data so that we can populate the form
     let response = await axios.get(BASE_API_URL + 'sighting/' + foodSightingId);
     let foodSighting = response.data;
-    console.log(foodSighting.datetime);
     res.render('edit_food_form', {
         'description': foodSighting.description,
         'food': foodSighting.food,
@@ -72,9 +71,32 @@ app.post('/food_sighting/edit/:food_sighting_id', async function(req,res){
 
     // 4. send the request
     let url = BASE_API_URL + 'sighting/' + sightingId;
-    console.log("url ====================>", url);
     await axios.put(url, payload);
 
+    res.redirect('/')
+
+})
+
+
+app.get('/food_sighting/delete/:food_sighting_id', async function(req,res){
+    // 1. we need to know of the id of the food sighting document that we want to delete
+    let foodSightingId = req.params.food_sighting_id;
+
+    // 2. we need the details of the food sighting that we are going to delete
+    let response = await axios.get(BASE_API_URL + 'sighting/' + foodSightingId);
+    let foodSighting = response.data;
+    console.log(foodSighting);
+
+    //3. render a form asking the user if they really want to delete the food sighting
+    res.render('confirm_delete', {
+        'foodSighting': foodSighting
+    })
+
+})
+
+app.post('/food_sighting/delete/:fsd', async function(req,res){
+    let foodSightingId = req.params.fsd;
+    await axios.delete(BASE_API_URL + 'sighting/' + foodSightingId);
     res.redirect('/')
 
 })
