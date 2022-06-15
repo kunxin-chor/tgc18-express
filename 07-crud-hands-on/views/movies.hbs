@@ -7,9 +7,11 @@
     <div class="card movie" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">{{this.title}}</h5>
+            <h6>ID: {{this.id}}</h6>
             <p class="card-text">{{this.plot}}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
+            <a href="/movies/edit/{{this.id}}" class="btn btn-primary">Edit</a>
+            <a href="/movies/delete/{{this.id}}" class="btn btn-danger">Delete</a>
+         </div>
     </div>
     {{/each}}
 </div>

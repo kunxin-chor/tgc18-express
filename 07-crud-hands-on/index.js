@@ -21,6 +21,8 @@ app.get('/', function(req,res){
     res.send("hello world")
 })
 
+
+
 app.get('/movies', async function(req,res){
 
     try {
@@ -35,6 +37,10 @@ app.get('/movies', async function(req,res){
     }
    
 })
+app.get('/movies/details/:movie_id', function(req,res){
+    res.send("get movie detail")
+})
+
 
 // typical standard for the URL 
 // <noun>/<verb>
@@ -61,6 +67,44 @@ app.post('/movies/create', async function(req,res){
         'plot': plot
     })
     res.redirect('/movies');
+})
+
+// the url in the first argument is for the browser/client interacting with our express
+app.get('/movies/edit/:movie_id', async function(req,res){
+    let movieId = req.params.movie_id;
+    // use axios.get to communicate with the API
+    // we follow the rules of the API for this part
+    let response = await axios.get(BASE_API_URL + 'movie/' + movieId);
+    let movie = response.data;
+    res.render('edit_movie',{
+        'movieData':movie
+    });
+})
+
+app.post('/movies/edit/:movie_id', async function(req,res){
+    let movieId = req.params.movie_id;
+    let newTitle = req.body.title;
+    let newPlot = req.body.plot;
+    await axios.patch(BASE_API_URL + '/movie/' + movieId,{
+        'title': newTitle,
+        'plot': newPlot
+    })
+    res.redirect('/movies')
+
+})
+
+app.get('/movies/delete/:movie_id', async function(req,res){
+    let movieId = req.params.movie_id;
+    let response = await axios.get(BASE_API_URL + 'movie/' + movieId);
+    res.render('confirm_delete',{
+        'movie': response.data
+    })
+})
+
+app.post('/movies/delete/:movie_id', async function(req,res){
+    let movieId = req.params.movie_id;
+    await axios.delete(BASE_API_URL + 'movie/' + movieId);
+    res.redirect('/movies')
 })
 
 app.listen(3000, function(){
