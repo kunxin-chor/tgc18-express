@@ -1,0 +1,22 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+
+{{#each pets}}
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{this.name}}</h5>
+    <ul>
+        <li>Age: {{this.age}}</li>
+        <li>Breed: {{this.breed}}</li>
+        <li>Problems: {{this.problems}}</li>
+        <li>Tags: {{this.tags}}</li>
+    </ul>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+{{/each}}
+
+{{/block}}
+
+{{/extends}}

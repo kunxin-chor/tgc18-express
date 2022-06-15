@@ -1,0 +1,29 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<form method="POST">
+    <div>
+        <label>Name:</label>
+        <input type="text" name="name" class="form-control"/>
+    </div>
+    <div>
+        <label>Breed:</label>
+        <input type="text" name="breed" class="form-control"/>
+    </div>
+    <div>
+        <label>Age:</label>
+        <input type="text" name="age" class="form-control"/>
+    </div>
+    <div>
+        <label>Problems:</label>
+        <input type="text" name="problems" class="form-control"/>
+    </div>
+    <div>
+        <label>Tags:</label>
+        <input type="text" name="tags" class="form-control"/>
+    </div>
+    <input type="submit" class="btn btn-primary mt-3"/>
+
+</form>
+{{/block}}
+{{/extends}}
