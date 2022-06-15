@@ -26,20 +26,58 @@ app.set('view engine', 'hbs'); // tell express we are using hbs as the view engi
 wax.on(hbs.handlebars);  // setup template inheritance
 wax.setLayoutPath('./views/layouts');
 
+// so that submitted form content will be inside req.body
+app.use(express.urlencoded({
+    extended: false
+}));
+
 const MONGO_URI = process.env.MONGO_URI;
 
 
 async function main() {
   
-    const db = await MongoUtil.connect(MONGO_URI, "sample_airbnb");
+    const db = await MongoUtil.connect(MONGO_URI, "tgc18_cico");
     app.get('/test', async function(req,res) {
         // we use the .toArray() to convert the results to an array of JavaScript objects
         let data = await db.collection('listingsAndReviews').find({}).limit(10).toArray();
         res.send(data);
     });
 
-    app.get('/', function (req, res) {
-        res.render('hello.hbs')
+    app.get('/', async function (req, res) {
+        const allFoodRecords = await db.collection('food_records')
+                                 .find({}) 
+                                 .toArray();
+
+        res.render('all-food.hbs',{
+            'allFood': allFoodRecords
+        })
+    })
+
+    // one route to display the form
+    app.get('/add-food', function(req,res){
+        res.render('add-food.hbs');
+    })
+
+    // one route to process the form
+    app.post('/add-food', async function(req,res){
+        let foodRecordName = req.body.foodRecordName;
+        let calories = req.body.calories;
+        let tags = [];
+        if (Array.isArray(req.body.tags)) {
+            tags = req.body.tags;
+        } else if (req.body.tags) {
+            tags = [ req.body.tags ];
+        }
+
+        let foodDocument = {
+            'food': foodRecordName,
+            'calories': calories,
+            'tags': tags
+        };
+
+        await db.collection('food_records').insertOne(foodDocument);
+        res.redirect("/");
+
     })
 }
 main();
