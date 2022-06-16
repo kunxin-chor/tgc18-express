@@ -180,21 +180,73 @@ async function main() {
     })
 
     app.get('/food/:foodid/notes/:noteid/update', async function(req,res){
+        // let foodRecord = await db.collection('food_records').findOne({
+        //     '_id': ObjectId(req.params.foodid),
+        // },{
+        //     'projection':{
+        //         'notes':{
+        //             '$elemMatch':{
+        //                 '_id': ObjectId(req.params.noteid)
+        //             }
+        //         }
+        //     }
+        // });
+
         let foodRecord = await db.collection('food_records').findOne({
             '_id': ObjectId(req.params.foodid),
+            'notes._id': ObjectId(req.params.noteid)
         },{
             'projection':{
-                'notes':{
-                    '$elemMatch':{
-                        '_id': ObjectId(req.params.noteid)
-                    }
-                }
+                'notes.$': 1
             }
-        });
+        })
+
         let noteToEdit = foodRecord.notes[0];
         res.render('edit-note',{
             'content': noteToEdit.content
         })
+    })
+    
+    app.post('/food/:foodid/notes/:noteid/update', async function(req,res){
+        let newContent = req.body.content;
+        await db.collection('food_records').updateOne({
+            '_id':ObjectId(req.params.foodid),
+            'notes._id':ObjectId(req.params.noteid)
+        },{
+            '$set':{
+                'notes.$.content': newContent
+            }
+        })
+        res.redirect(`/food/${req.params.foodid}/notes`);
+    });
+
+    app.get('/food/:foodid/notes/:noteid/delete', async function(req,res){
+        let foodRecord = await db.collection('food_records').findOne({
+            '_id': ObjectId(req.params.foodid),
+            'notes._id': ObjectId(req.params.noteid)
+        },{
+            'projection':{
+                'notes.$': 1
+            }
+        })
+
+        let noteToDelete= foodRecord.notes[0];
+        res.render('delete-note',{
+            'note': noteToDelete 
+        })
+    })
+
+    app.post('/food/:foodid/notes/:noteid/delete', async function(req,res){
+        await db.collection('food_records').updateOne({
+            '_id':ObjectId(req.params.foodid)
+        },{
+            '$pull':{
+                'notes':{
+                    '_id': ObjectId(req.params.noteid)
+                }
+            }
+        })
+        res.redirect('/food/'+req.params.foodid+'/notes')
     })
 }
 main();
