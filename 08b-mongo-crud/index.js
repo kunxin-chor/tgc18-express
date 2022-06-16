@@ -137,7 +137,64 @@ async function main() {
         await db.collection('food_records').deleteOne({
             '_id':ObjectId(id)
         })
-        res.redirect('/')
+       res.redirect('/')
+    })
+
+    // display the form to ask the user to add a note
+    app.get('/food/:foodid/notes/add', async function(req,res){
+        let foodRecord = await db.collection('food_records').findOne({
+            '_id': ObjectId(req.params.foodid)
+        },{
+            // projection is to select a few fields from the document
+            'projection':{
+                'food': 1
+            }
+        })
+     
+        res.render('add-note',{
+            'foodRecord':foodRecord
+        })
+    })
+
+    // process the form submitted by the user
+    app.post('/food/:foodid/notes/add', async function(req,res){
+        await db.collection('food_records').updateOne({
+            '_id': ObjectId(req.params.foodid)
+        },{
+            '$push':{
+                'notes': {
+                    '_id': ObjectId(), // if ObjectId() has no argument then it will create a new one (guaranteed to be unique)
+                    'content': req.body.content
+                }
+            }
+        })
+
+        res.redirect('/food/'+req.params.foodid+'/notes')
+    })
+
+    app.get('/food/:foodid/notes', async function(req,res){
+        let foodRecord = await getFoodRecordById(req.params.foodid);
+        res.render('show-notes',{
+            'foodRecord': foodRecord
+        })
+    })
+
+    app.get('/food/:foodid/notes/:noteid/update', async function(req,res){
+        let foodRecord = await db.collection('food_records').findOne({
+            '_id': ObjectId(req.params.foodid),
+        },{
+            'projection':{
+                'notes':{
+                    '$elemMatch':{
+                        '_id': ObjectId(req.params.noteid)
+                    }
+                }
+            }
+        });
+        let noteToEdit = foodRecord.notes[0];
+        res.render('edit-note',{
+            'content': noteToEdit.content
+        })
     })
 }
 main();

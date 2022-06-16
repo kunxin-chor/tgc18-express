@@ -1,0 +1,45 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<form method="POST">
+    <div>
+        <label>Name:</label>
+        <input type="text" name="name" class="form-control" value="{{animal.name}}"/>
+    </div>
+    <div>
+        <label>Breed:</label>
+        <input type="text" name="breed" class="form-control" value="{{animal.breed}}"/>
+    </div>
+    <div>
+        <label>Age:</label>
+        <input type="text" name="age" class="form-control" value="{{animal.age}}"/>
+    </div>
+    <div>
+        <label>Problems:</label>
+        <input type="text" name="problems" class="form-control" value="{{animal.problems}}"/>
+    </div>
+    <div>
+        <label>HDB Approved</label>
+        <input type="radio" name="hdb_approved" value="true" class="form-check-input" {{#eq animal.hbd_approved true}}checked{{/eq}}/>
+        <label class="form-check-label">Yes</label>
+        <input type="radio" name="hdb_approved" value="false" class="form-check-input" {{#eq animal.hdb_approved false}}checked{{/eq}}>
+        <label class="form-check-label">No</label>
+    </div>
+
+    <div>
+        <label>Tags:</label>
+        <input type="checkbox" class="form-check-input" name="tags" value="house-broken" {{#inArray animal.tags "house-broken"}}checked{{/inArray}}/>
+        <label class="form-check-label">House Broken</label>
+        <input type="checkbox" class="form-check-input" name="tags" value="vaccinated" {{#inArray animal.tags "vaccinated"}}checked{{/inArray}}>
+        <label class="form-check-label">Vaccinated</label>
+        <input type="checkbox" class="form-check-input" name="tags" value="chipped" {{#inArray animal.tags "chipped"}}checked{{/inArray}}/>
+        <label class="form-check-label">Microchipped</label>
+        <input type="checkbox" class="form-check-input" name="tags" value="fixed" {{#inArray animal.tags "fixed"}}checked{{/inArray}}/>
+        <label class="form-check-label">Fixed</label>
+
+    </div>
+    <input type="submit" class="btn btn-primary mt-3"/>
+
+</form>
+{{/block}}
+{{/extends}}

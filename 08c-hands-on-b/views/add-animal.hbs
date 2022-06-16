@@ -19,8 +19,24 @@
         <input type="text" name="problems" class="form-control"/>
     </div>
     <div>
+        <label>HDB Approved</label>
+        <input type="radio" name="hdb_approved" value="true" class="form-check-input"/>
+        <label class="form-check-label">Yes</label>
+        <input type="radio" name="hdb_approved" value="false" class="form-check-input"/>
+        <label class="form-check-label">No</label>
+    </div>
+
+    <div>
         <label>Tags:</label>
-        <input type="text" name="tags" class="form-control"/>
+        <input type="checkbox" class="form-check-input" name="tags" value="house-broken"/>
+        <label class="form-check-label">House Broken</label>
+        <input type="checkbox" class="form-check-input" name="tags" value="vaccinated"/>
+        <label class="form-check-label">Vaccinated</label>
+        <input type="checkbox" class="form-check-input" name="tags" value="chipped"/>
+        <label class="form-check-label">Microchipped</label>
+        <input type="checkbox" class="form-check-input" name="tags" value="fixed"/>
+        <label class="form-check-label">Fixed</label>
+
     </div>
     <input type="submit" class="btn btn-primary mt-3"/>
 
