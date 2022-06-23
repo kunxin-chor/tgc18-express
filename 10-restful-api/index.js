@@ -3,6 +3,7 @@ require('dotenv').config();  // for .env file (to load the variables of the .env
 const MongoUtil = require('./MongoUtil'); // require in the MongoUtil.js file (it's the same directory as our index.js)
 const MONGO_URI = process.env.MONGO_URI;
 const cors = require('cors');
+const { ObjectId } = require('mongodb');
 const app = express();
 
 
@@ -64,7 +65,36 @@ async function main() {
         // ! toArray() is async
         res.send(await results.toArray());
     } )
+
+    // update
+    // patch vs. put (most of the time we will use put)
+    app.put('/food_sightings/:id', async function(req,res){
+        let description = req.body.description;
+        let food = req.body.food;
+        let datetime = req.body.date ? new Date(req.body.date) : new Date();
+        let results = await db.collection('sightings').updateOne({
+            '_id': ObjectId(req.params.id)
+        },{
+            '$set':{
+                'description': description,
+                'food': food,
+                'datetime': datetime
+            }
+        });
+        res.status(200);
+        res.json(results);
+    })
     
+    // delete
+    app.delete('/food_sightings/:id', async function(req,res){
+        let results = await db.collection('sightings').deleteOne({
+            '_id': ObjectId(req.params.id)
+        });
+        res.status(200);
+        res.json({
+            'status':'Ok'
+        })
+    })
 } 
 main();
 
