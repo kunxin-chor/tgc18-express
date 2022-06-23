@@ -40,6 +40,12 @@ async function main() {
         res.send(result);
     })
 
+    app.get('/food_sightings/:id', async function(req,res){
+        res.json(await db.collection('sightings').findOne({
+            '_id': ObjectId(req.params.id)
+        }))
+    })
+
     app.get('/food_sightings', async function(req,res){
         // base query: the query that will get ALL the documents
         let criteria = {};
@@ -88,7 +94,7 @@ async function main() {
     // delete
     app.delete('/food_sightings/:id', async function(req,res){
         let results = await db.collection('sightings').deleteOne({
-            '_id': ObjectId(req.params.id)
+            '_id': ObjectId
         });
         res.status(200);
         res.json({
