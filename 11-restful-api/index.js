@@ -16,6 +16,11 @@ app.use(cors());
 // to configure all recieved data to be converted to JSON
 app.use(express.json());
 
+const dummyMiddleware = function(req,res,next) {
+    req.date = new Date();
+    next();
+}
+
 async function main() {
 
     const db = await MongoUtil.connect(MONGO_URI, "tgc18_food_sightings_jwt");
