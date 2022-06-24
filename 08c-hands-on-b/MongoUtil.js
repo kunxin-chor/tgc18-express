@@ -14,7 +14,7 @@ async function connect(mongoUri, dbName) {
     return db;
 }
 
-// export out connect so that other JavaScript file
+// export out `connect` so that other JavaScript file
 module.exports = {
     connect
 }
