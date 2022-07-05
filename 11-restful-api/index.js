@@ -21,6 +21,31 @@ const dummyMiddleware = function(req,res,next) {
     next();
 }
 
+function checkIfAuthenticated(req,res,next) {
+    let authorizationHeaders = req.headers.authorization;
+    if (!authorizationHeaders) {
+        res.sendStatus(401);
+        return;
+    }
+    // get the token
+    let token = authorizationHeaders.split(" ")[1];
+    
+    // verify the token with the token secret
+    // after the verification, the token data will be passed to
+    // the function specified in the third argument
+    jwt.verify(token, process.env.TOKEN_SECRET, function(err,tokenData){
+        // if there is error (err will be null or undefined if there are no error)
+        if (err) {
+            res.sendStatus(401); // res.status() + res.send()
+            return;
+        } else {
+            req.user = tokenData;
+            next();
+        }
+    })
+
+}
+
 async function main() {
 
     const db = await MongoUtil.connect(MONGO_URI, "tgc18_food_sightings_jwt");
